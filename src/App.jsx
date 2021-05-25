@@ -9,7 +9,7 @@ import Create from "./components/create/create";
 function App() {
   return (
     <BrowserRouter>
-      <Navbar/>
+      <Navbar/> 
       <Switch>
         <Route exact path="/">
           <Home/>
