@@ -1,46 +1,53 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from 'react-dom';
+import { useForm } from "react-hook-form";
 import styles from "./create.module.css"; // eslint-disable-line no-unused-vars
-import CardAddForm from "./create-CardAddForm";
+import FieldArray from "./create_fieldArray";
 
-function Create() {
-  const [addCard, setAddCard] = useState([
+
+const defaultValues = {
+  test: [
     {
-      "단어": "",
-      "뜻": ""
+      name: "useFieldArray1",
+      cardArray: [{ field1: "", field2: "" }]
     },
     {
-      "단어": "",
-      "뜻": ""
+      name: "useFieldArray2",
+      cardArray: [{ field1: "", field2: "" }]
     }
-  ]);
+  ]
+};
 
-  const onAddCard = () => {
-    setAddCard([...addCard, {
-      "단어": "",
-      "뜻": ""
-    }])
-  }
+
+function Create() {
+  const {
+    control,
+    register,
+    handleSubmit,
+    getValues,
+    errors,
+    reset,
+    setValue
+  } = useForm({
+    defaultValues
+  });
+  const onSubmit = (data) => console.log("data", data);
+
 
   return (
-    <div className="cardsetbody">
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <h1>카드 세트 만들기</h1>
 
-      <div className="cardsetName">
-        <textarea placeholder="제목을 입력해주세요" /> <br />
-        <textarea placeholder="설명을 입력해주세요" />
-      </div>
-      <hr />
-      <div className="cardddbody" id="cbody">
-        {addCard.map((addCard) => {
-          return (<CardAddForm 단어={addCard.단어} 뜻={addCard.뜻}></CardAddForm>)
-        })
-        }
-        <div id="testbody"></div>
-        <p><button onClick={onAddCard}>카드추가하기</button></p>
-      </div>
+      <FieldArray
+        {...{ control, register, defaultValues, getValues, setValue, errors }}
+      />
 
-    </div >
-  )
+      <button type="button" onClick={() => reset(defaultValues)}>
+        Reset
+      </button>
+
+      <input type="submit" value="세트 만들기" />
+    </form>
+  );
 }
 
 export default Create;
